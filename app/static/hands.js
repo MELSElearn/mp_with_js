@@ -1,101 +1,64 @@
-const video3 = document.getElementsByClassName('input_video3')[0];
-const out3 = document.getElementsByClassName('output3')[0];
-const controlsElement3 = document.getElementsByClassName('control3')[0];
-const canvasCtx3 = out3.getContext('2d');
-const fpsControl = new FPS();
+const videoElement = document.getElementsByClassName('input_video')[0];
+const canvasElement = document.getElementsByClassName('output_canvas')[0];
+const canvasCtx = canvasElement.getContext('2d');
 
-const spinner = document.querySelector('.loading');
-spinner.ontransitionend = () => {
-  spinner.style.display = 'none';
-};
-
-function onResultsHands(results) {
-  var cx,cy;
-  document.body.classList.add('loaded');
-  fpsControl.tick();
-
-  canvasCtx3.save();
-  canvasCtx3.clearRect(0, 0, out3.width, out3.height);
-  canvasCtx3.drawImage(results.image, 0, 0, out3.width, out3.height);
-  
-  if (results.multiHandLandmarks && results.multiHandedness) {
-    for (let index = 0; index < results.multiHandLandmarks.length; index++) {
-      const classification = results.multiHandedness[index];
-      const isRightHand = classification.label === 'Right';
-      const landmarks = results.multiHandLandmarks[index];
- 
+function onResults(results) {
+  var cx,cy;	
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  canvasCtx.drawImage(
+      results.image, 0, 0, canvasElement.width, canvasElement.height);
+  if (results.multiHandLandmarks) {
+    for (const landmarks of results.multiHandLandmarks) {
 	  var myJSON = JSON.stringify(landmarks[8]);
 	  var myJSON2 = JSON.parse(myJSON);
-	  cx = parseInt(myJSON2.x*out3.width);
-	  cy = parseInt(myJSON2.y*out3.height);
+	  cx = parseInt(myJSON2.x*canvasElement.width);
+	  cy = parseInt(myJSON2.y*canvasElement.height);	
 	  
-      drawConnectors(
-          canvasCtx3, landmarks, HAND_CONNECTIONS,
-          {color: isRightHand ? '#00FF00' : '#FF0000'}),
-      drawLandmarks(canvasCtx3, landmarks, {
-        color: isRightHand ? '#00FF00' : '#FF0000',
-        fillColor: isRightHand ? '#FF0000' : '#00FF00',
-        radius: (x) => {
-          return lerp(x.from.z, -0.15, .1, 10, 1);
-        }
-      });
+      drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
+                     {color: '#00FF00', lineWidth: 5});
+      drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
     }
   }
+  canvasCtx.restore();
   
-  canvasCtx3.restore();
-  let src = cv.imread('output3');
-  if (cx > 50 && cx < 200 && cy > 100 && cy<250)
+  let src = cv.imread('output_canvas');
+  if (cx > 50 && cx < 150 && cy > 100 && cy<200)
   {
-	  cv.rectangle(src, new cv.Point(50, 100), new cv.Point(200, 250), [0, 0, 255, 255], -1); //RGBA - A for alpha
+	  cv.rectangle(src, new cv.Point(50, 100), new cv.Point(150, 200), [0, 0, 255, 255], -1); //RGBA - A for alpha
   }else
   {
-	  cv.rectangle(src, new cv.Point(50, 100), new cv.Point(200, 250), [0, 0, 255, 255], 4); //RGBA - A for alpha
+	  cv.rectangle(src, new cv.Point(50, 100), new cv.Point(150, 200), [0, 0, 255, 255], 4); //RGBA - A for alpha
   }
   
-  cv.imshow('output3', src);
+  if (cx > 200 && cx < 300 && cy > 100 && cy<200)
+  {
+	  cv.rectangle(src, new cv.Point(200, 100), new cv.Point(300, 200), [255, 0, 0, 255], -1); //RGBA - A for alpha
+  }else
+  {
+	  cv.rectangle(src, new cv.Point(200, 100), new cv.Point(300, 200), [0, 0, 255, 255], -1); //RGBA - A for alpha
+  }
+  
+  cv.imshow('output_canvas', src);
   src.delete();
 }
 
 const hands = new Hands({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/${file}`;
+  return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
 }});
-hands.onResults(onResultsHands);
+hands.setOptions({
+  maxNumHands: 2,
+  modelComplexity: 1,
+  minDetectionConfidence: 0.5,
+  minTrackingConfidence: 0.5
+});
+hands.onResults(onResults);
 
-const camera = new Camera(video3, {
+const camera = new Camera(videoElement, {
   onFrame: async () => {
-    await hands.send({image: video3});
+    await hands.send({image: videoElement});
   },
   width: 480,
   height: 480
 });
 camera.start();
-
-new ControlPanel(controlsElement3, {
-      selfieMode: true,
-      maxNumHands: 2,
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5
-    })
-    .add([
-      new StaticText({title: 'MediaPipe Hands'}),
-      fpsControl,
-      new Toggle({title: 'Selfie Mode', field: 'selfieMode'}),
-      new Slider(
-          {title: 'Max Number of Hands', field: 'maxNumHands', range: [1, 4], step: 1}),
-      new Slider({
-        title: 'Min Detection Confidence',
-        field: 'minDetectionConfidence',
-        range: [0, 1],
-        step: 0.01
-      }),
-      new Slider({
-        title: 'Min Tracking Confidence',
-        field: 'minTrackingConfidence',
-        range: [0, 1],
-        step: 0.01
-      }),
-    ])
-    .on(options => {
-      video3.classList.toggle('selfie', options.selfieMode);
-      hands.setOptions(options);
-    });
