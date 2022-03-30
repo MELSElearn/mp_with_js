@@ -12,6 +12,15 @@
 <body>
   <div class="container">
   	<center>
+	<form method="POST">
+
+	      <input type="radio" id="box" name="selectype" value="Box">
+	      <label for="html">Box</label><br>
+	      <input type="radio" id="css" name="selectype" value="DragandDrop">
+	      <label for="css">Drag and Drop</label><br>
+	      <input type="submit">
+	      <br />
+	  </form>	
   	<table border="0" width="50%">
     <tr>
     <td width="50%" align="center">
@@ -25,12 +34,12 @@
     </table>
     </center>
   </div>
-  <script type="text/javascript" src="./js/hands_new2.js"></script>
+  <script type="text/javascript" src="static/hands_new2.js"></script>
   <script>
   function onOpenCvReady() {
 	  
   }
   </script>
-  <script async src="./js/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+  <script async src="static/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
 </body>
 </html>
