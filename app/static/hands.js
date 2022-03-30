@@ -1,6 +1,24 @@
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
+var video = document.querySelector("#input_video");
+
+if (navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function (stream) {
+		  const camera = new Camera(videoElement, {
+		  onFrame: async () => {
+			await hands.send({image: videoElement});
+		  },
+		  width: 480,
+		  height: 480
+		});
+		camera.start();
+    })
+    .catch(function (err0r) {
+      console.log(err0r);
+    });
+}
 
 function onResults(results) {
   var cx,cy;	
@@ -53,7 +71,7 @@ hands.setOptions({
   minTrackingConfidence: 0.8
 });
 hands.onResults(onResults);
-
+/*
 const camera = new Camera(videoElement, {
   onFrame: async () => {
     await hands.send({image: videoElement});
@@ -62,3 +80,4 @@ const camera = new Camera(videoElement, {
   height: 480
 });
 camera.start();
+*/
