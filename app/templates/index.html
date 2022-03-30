@@ -11,6 +11,15 @@
 <body>
 	<div class="container">
 	<center>
+	<form method="POST">
+
+	      <input type="radio" id="box" name="selectype" value="Box">
+	      <label for="html">Box</label><br>
+	      <input type="radio" id="css" name="selectype" value="DragandDrop">
+	      <label for="css">Drag and Drop</label><br>
+	      <input type="submit">
+	      <br />
+	  </form>
 	<table border="0" width="50%">
 		<tr>
 		<td width="50%" align="center">
@@ -25,15 +34,7 @@
 	 </table>
     </center>
   </div>
- <form method="POST">
-     
-      <input type="radio" id="box" name="selectype" value="Box">
-      <label for="html">Box</label><br>
-      <input type="radio" id="css" name="selectype" value="DragandDrop">
-      <label for="css">Drag and Drop</label><br>
-      <input type="submit">
-      <br />
-  </form>
+ 
   <script type="text/javascript" src="static/hands.js"></script>
   <script>
   function onOpenCvReady() {
