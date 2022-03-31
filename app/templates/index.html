@@ -35,12 +35,27 @@
     </center>
   </div>
  
-  <script type="text/javascript" src="static/hands_index.js"></script>
+  <script type="text/javascript">
+  const videoElement = document.getElementsByClassName('input_video')[0];
+
+
+const camera = new Camera(videoElement, {
+  onFrame: async () => {
+    //await hands.send({image: videoElement});
+  },
+  width: 480,
+  height: 480
+});
+camera.start();
+
+
+  
+  </script>
   <script>
   function onOpenCvReady() {
 	  
   }
   </script>
-  <script async src="static/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+  
 </body>
 </html>
