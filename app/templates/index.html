@@ -38,15 +38,14 @@
   <script type="text/javascript">
   const videoElement = document.getElementsByClassName('input_video')[0];
 
+navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    .then(function(s) {
+    stream = s;
+    videoElement.srcObject = s;
+    videoElement.play();
+  })
 
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    //await hands.send({image: videoElement});
-  },
-  width: 480,
-  height: 480
-});
-camera.start();
+
 
 
   
