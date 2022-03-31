@@ -7,6 +7,17 @@ function onResults(results) {
   var cx,cy;	
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+ 
+  canvasCtx.restore();
+  
+ 
+}
+/*
+function onResults(results) {
+  var cx,cy;	
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.drawImage(
       results.image, 0, 0, canvasElement.width, canvasElement.height);
   if (results.multiHandLandmarks) {
@@ -43,7 +54,7 @@ function onResults(results) {
   cv.imshow('output_canvas', src);
   src.delete();
 }
-
+*/
 const hands = new Hands({locateFile: (file) => {
   return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
 }});
