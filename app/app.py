@@ -14,7 +14,7 @@ def hello_world():
     else:
         mytype = request.form['selectype']
         if mytype=='Box':
-            return render_template('index.html')
+            return render_template('index_hand.html')
         elif mytype=='DragandDrop':
             return render_template('html_drag.html')
         else:
