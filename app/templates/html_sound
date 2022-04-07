@@ -7,6 +7,18 @@
 
 <body>
 <center>
+<form method="POST">
+
+	      <input type="radio" id="box" name="selectype" value="Box">
+	      <label for="html">Box</label><br>
+	      <input type="radio" id="css" name="selectype" value="DragandDrop">
+	      <label for="css">Drag and Drop</label><br>
+		<input type="radio" id="sound" name="selectype" value="Sound">
+	      <label for="css">Sound</label><br>
+	      <input type="submit">
+	      <br />
+	  </form>
+	  <br><Br>
 <div>Teachable Machine Audio Model</div>
 <button type="button" onclick="init()">Start</button>
 <div id="label-container"></div>
