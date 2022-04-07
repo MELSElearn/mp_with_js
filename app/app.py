@@ -17,5 +17,7 @@ def hello_world():
             return render_template('index_hand.html')
         elif mytype=='DragandDrop':
             return render_template('html_drag.html')
+        elif mytype=='Sound':
+            return render_template('html_sound.html')
         else:
             return render_template('index.html')
